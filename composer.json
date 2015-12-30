@@ -1,0 +1,22 @@
+{
+  "name": "colorium/http",
+  "type": "library",
+  "description": "HTTP implementation",
+  "homepage": "https://github.com/colorium/http",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aymeric Assier",
+      "email": "aymeric.assier@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Colorium\\Http": "/src/Colorium/Http/"
+    }
+  }
+}
