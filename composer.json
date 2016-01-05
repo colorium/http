@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Colorium\\Http": "/src/Colorium/Http/"
+      "Colorium\\Http\\": "/src/Colorium/Http/"
     }
   }
 }
