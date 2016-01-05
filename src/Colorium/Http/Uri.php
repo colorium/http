@@ -33,10 +33,7 @@ class Uri
     public $fragment;
 
     /** @var string */
-    public $relative;
-
-    /** @var string */
-    public $absolute;
+    public $full;
 
 
     /**
@@ -217,6 +214,33 @@ class Uri
             'query' => $query,
             'fragment' => null,
         ]);
+    }
+
+
+    /**
+     * Sanitize string for uri usage
+     *
+     * @param $string
+     * @return string
+     */
+    public static function sanitize($string)
+    {
+        $string = strtolower($string);
+        $string = str_replace('é', 'e', $string);
+        $string = str_replace('è', 'e', $string);
+        $string = str_replace('ë', 'e', $string);
+        $string = str_replace('ê', 'e', $string);
+        $string = str_replace('à', 'a', $string);
+        $string = str_replace('ä', 'a', $string);
+        $string = str_replace('ö', 'o', $string);
+        $string = str_replace('ù', 'u', $string);
+        $string = str_replace('ü', 'u', $string);
+        $string = str_replace('ç', 'c', $string);
+        $string = preg_replace('/[^0-9a-z-]/', '-', $string);
+        $string = preg_replace('/-+/', '-', $string);
+        $string = trim($string, ' -');
+
+        return $string;
     }
 
 }
