@@ -50,14 +50,14 @@ class Uri
         if(!is_array($uri)) {
             $uri = parse_url($uri);
         }
-        $parsed = parse_url($uri) + [
+        $parsed = $uri + [
             'scheme' => null,
             'user' => null,
             'pass' => null,
             'host' => null,
             'port' => null,
             'base' => $base,
-            'path' => null,
+            'path' => '/',
             'query' => null,
             'fragment' => null,
         ];
@@ -72,7 +72,7 @@ class Uri
         $this->query = $parsed['query'];
         $this->fragment = $parsed['fragment'];
 
-        $this->path = substr($this->path, strlen($this->base));
+        $this->path = substr($this->path, strlen($this->base)) ?: '/';
         parse_str($parsed['query'], $this->params);
 
         $full = '/';
@@ -197,7 +197,7 @@ class Uri
         if($base === true) {
             if(isset($_SERVER['SCRIPT_NAME']) and $script = dirname($_SERVER['SCRIPT_NAME'])) {
                 while($script != '/') {
-                    if(strncmp($query, $script, strlen($script)) === 0) {
+                    if(strncmp($path, $script, strlen($script)) === 0) {
                         $base = $script;
                         break;
                     }
