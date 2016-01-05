@@ -1,7 +1,7 @@
 {
   "name": "colorium/http",
   "type": "library",
-  "description": "HTTP implementation",
+  "description": "HTTP Request/Response Implementation",
   "homepage": "https://github.com/colorium/http",
   "license": "MIT",
   "authors": [
