@@ -69,7 +69,9 @@ class Uri
         $this->query = $parsed['query'];
         $this->fragment = $parsed['fragment'];
 
-        $this->path = substr($this->path, strlen($this->base)) ?: '/';
+        if($this->base) {
+            $this->path = substr($this->path, strlen($this->base)) ?: '/';
+        }
         parse_str($parsed['query'], $this->params);
 
         $full = '/';
@@ -94,7 +96,7 @@ class Uri
             $full .= trim($this->base, '/');
         }
         if($this->path) {
-            $full .= trim($this->path, '/');
+            $full .= '/' . trim($this->path, '/');
         }
         if($this->query) {
             $full .= '?' . $this->query;
@@ -144,8 +146,8 @@ class Uri
             'host' => $this->host,
             'port' => $this->port,
             'base' => $this->base,
-            'path' => $path,
-            'query' => http_build_str($params),
+            'path' => $this->base . $path,
+            'query' => http_build_query($params),
             'fragment' => $this->fragment,
         ]);
     }
