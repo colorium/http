@@ -1,1 +1,1 @@
-# Colorium HTTP implementation
+# Colorium HTTP Component
