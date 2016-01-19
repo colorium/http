@@ -53,11 +53,11 @@ class Request
     /** @var string */
     public $ip;
 
+    /** @var array */
+    public $local = ['127.0.0.1', '::1'];
+
     /** @var string */
     public $time;
-
-    /** @var \stdClass */
-    public $context;
 
 
     /**
@@ -151,6 +151,17 @@ class Request
     public function cookie($name)
     {
         return isset($this->cookies[$name]) ? $this->cookies[$name] : null;
+    }
+
+
+    /**
+     * If IP is local
+     *
+     * @return bool
+     */
+    public function local()
+    {
+        return in_array($this->ip, $this->local);
     }
 
 
