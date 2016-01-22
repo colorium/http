@@ -148,7 +148,7 @@ class Response
             }
 
             // set http code
-            header('HTTP/1.1 ' . $this->code . ' ' . Status::code($this->code), true, $this->code);
+            header('HTTP/1.1 ' . $this->code . ' ' . Status::message($this->code), true, $this->code);
 
             // compile header
             foreach($this->headers as $name => $value) {
