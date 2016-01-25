@@ -109,6 +109,20 @@ class Uri
 
 
     /**
+     * Get uri param
+     *
+     * @param string $key
+     * @return string
+     */
+    public function param($key)
+    {
+        return isset($this->params[$key])
+            ? $this->params[$key]
+            : null;
+    }
+
+
+    /**
      * Change base uri
      *
      * @param string $base
