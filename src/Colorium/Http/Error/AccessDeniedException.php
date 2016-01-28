@@ -4,7 +4,7 @@ namespace Colorium\Http\Error;
 
 use Colorium\Http\Status;
 
-class UnauthorizedException extends HttpException
+class AccessDeniedException extends HttpException
 {
 
 	/** @var int */
