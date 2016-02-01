@@ -169,4 +169,75 @@ class Response
         return $this->sent();
     }
 
+
+    /**
+     * Create HTML response
+     *
+     * @param string $content
+     * @param int $code
+     * @param array $headers
+     * @return Response\Html
+     */
+    public static function html($content = null, $code = 200, array $headers = [])
+    {
+        return new Response\Html($content, $code , $headers);
+    }
+
+
+    /**
+     * Create JSON response
+     *
+     * @param string $content
+     * @param int $code
+     * @param array $headers
+     * @return Response\Json
+     */
+    public static function json($content = null, $code = 200, array $headers = [])
+    {
+        return new Response\Json($content, $code , $headers);
+    }
+
+
+    /**
+     * Create redirect response
+     *
+     * @param string $uri
+     * @param int $code
+     * @param array $headers
+     * @return Response\Redirect
+     */
+    public static function redirect($uri, $code = 200, array $headers = [])
+    {
+        return new Response\Redirect($uri, $code , $headers);
+    }
+
+
+    /**
+     * Create download response
+     *
+     * @param string $filename
+     * @param int $code
+     * @param array $headers
+     * @return Response\Redirect
+     */
+    public static function download($filename, $code = 200, array $headers = [])
+    {
+        return new Response\Download($filename, $code , $headers);
+    }
+
+
+    /**
+     * Create template response
+     *
+     * @param string $template
+     * @param array $vars
+     * @param int $code
+     * @param array $headers
+     * @return Response\Template
+     */
+    public static function template($template, array $vars = [], $code = 200, array $headers = [])
+    {
+        return new Response\Template($template, $vars, $code , $headers);
+    }
+
 }

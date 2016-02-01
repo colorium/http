@@ -93,10 +93,10 @@ class Uri
             }
         }
         if($this->base) {
-            $full .= trim($this->base, '/');
+            $full .= trim($this->base, '/') . '/';
         }
         if($this->path) {
-            $full .= '/' . trim($this->path, '/');
+            $full .= trim($this->path, '/');
         }
         if($this->query) {
             $full .= '?' . $this->query;
