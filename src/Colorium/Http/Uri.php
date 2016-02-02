@@ -208,6 +208,7 @@ class Uri
 
         // auto-resolve base path
         if($base === true) {
+            $base = null;
             if(isset($_SERVER['SCRIPT_NAME']) and $script = dirname($_SERVER['SCRIPT_NAME'])) {
                 while($script != '/') {
                     if(strncmp($path, $script, strlen($script)) === 0) {
