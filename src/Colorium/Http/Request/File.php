@@ -42,7 +42,7 @@ class File
     {
         $this->name = basename($file['name']);
         $this->ext = pathinfo($this->name, PATHINFO_EXTENSION);
-        $this->tmp = $file['tmp_file'];
+        $this->tmp = $file['tmp_name'];
         $this->type = $file['type'];
         $this->size = $file['size'];
         $this->error = (int)$file['error'];
