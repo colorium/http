@@ -47,6 +47,9 @@ class Request
     /** @var Request\File[] */
     public $files = [];
 
+    /** @var bool */
+    public $cli = false;
+
     /** @var string */
     public $agent;
 
@@ -72,7 +75,8 @@ class Request
         $this->method = $method;
 
         $this->accept = new Request\Accept;
-        $this->context = new \stdClass;
+
+        $this->cli = (php_sapi_name() == 'cli');
     }
 
 
