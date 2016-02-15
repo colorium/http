@@ -210,7 +210,8 @@ class Uri
         if($base === true) {
             $base = null;
             if(isset($_SERVER['SCRIPT_NAME']) and $script = dirname($_SERVER['SCRIPT_NAME'])) {
-                while($script != '/') {
+                $script = trim($script, '.');
+                while($script and $script != '/') {
                     if(strncmp($path, $script, strlen($script)) === 0) {
                         $base = $script;
                         break;
