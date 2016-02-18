@@ -185,51 +185,55 @@ class Request
      * @param bool|string $base
      * @return static
      */
-    public static function generate($base = true)
+    public static function globals($base = true)
     {
-        $uri = Uri::current($base);
+        static $globals;
+        if(!$globals) {
 
-        $request = new static($uri);
-        $request->servers = &$_SERVER;
-        $request->envs = &$_ENV;
-        $request->values = &$_POST;
-        $request->cookies = &$_COOKIE;
+            $uri = Uri::current($base);
 
-        $request->accept = Request\Accept::from(
-            $request->server('HTTP_ACCEPT'),
-            $request->server('HTTP_ACCEPT_LANGUAGE'),
-            $request->server('HTTP_ACCEPT_ENCODING'),
-            $request->server('HTTP_ACCEPT_CHARSET')
-        );
+            $globals = new static($uri);
+            $globals->servers = &$_SERVER;
+            $globals->envs = &$_ENV;
+            $globals->values = &$_POST;
+            $globals->cookies = &$_COOKIE;
 
-        $request->method = $request->server('REQUEST_METHOD');
-        $request->secure = ($request->server('HTTPS') == 'on');
-        $request->ajax = $request->server('HTTP_X_REQUESTED_WITH')
-            && strtolower($request->server('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest';
+            $globals->accept = Request\Accept::from(
+                $globals->server('HTTP_ACCEPT'),
+                $globals->server('HTTP_ACCEPT_LANGUAGE'),
+                $globals->server('HTTP_ACCEPT_ENCODING'),
+                $globals->server('HTTP_ACCEPT_CHARSET')
+            );
 
-        $request->root = dirname($request->server('SCRIPT_FILENAME'));
-        $request->root = rtrim($request->root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $globals->method = $globals->server('REQUEST_METHOD');
+            $globals->secure = ($globals->server('HTTPS') == 'on');
+            $globals->ajax = $globals->server('HTTP_X_REQUESTED_WITH')
+                && strtolower($globals->server('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest';
 
-        if(function_exists('http_response_code')) {
-            $request->code = http_response_code();
+            $globals->root = dirname($globals->server('SCRIPT_FILENAME'));
+            $globals->root = rtrim($globals->root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+            if (function_exists('http_response_code')) {
+                $globals->code = http_response_code();
+            }
+            if (function_exists('http_get_request_body')) {
+                $globals->body = http_get_request_body();
+            }
+            if (function_exists('apache_request_headers')) {
+                $globals->headers = apache_request_headers();
+            }
+
+            foreach ($_FILES as $index => $file) {
+                $globals->files[$index] = new Request\File($file);
+            }
+
+            $globals->cli = (php_sapi_name() === 'cli');
+            $globals->agent = $globals->server('HTTP_USER_AGENT');
+            $globals->ip = $globals->server('REMOTE_ADDR');
+            $globals->time = $globals->server('REQUEST_TIME');
         }
-        if(function_exists('http_get_request_body')) {
-            $request->body = http_get_request_body();
-        }
-        if(function_exists('apache_request_headers')) {
-            $request->headers = apache_request_headers();
-        }
 
-        foreach($_FILES as $index => $file) {
-            $request->files[$index] = new Request\File($file);
-        }
-
-        $request->cli = (php_sapi_name() === 'cli');
-        $request->agent = $request->server('HTTP_USER_AGENT');
-        $request->ip = $request->server('REMOTE_ADDR');
-        $request->time = $request->server('REQUEST_TIME');
-
-        return $request;
+        return $globals;
     }
 
 }
