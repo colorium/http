@@ -171,6 +171,20 @@ class Response
 
 
     /**
+     * Raw response
+     *
+     * @param string $content
+     * @param int $code
+     * @param array $headers
+     * @return Response
+     */
+    public static function create($content = null, $code = 200, array $headers = [])
+    {
+        return new Response($content, $code, $headers);
+    }
+
+
+    /**
      * Create HTML response
      *
      * @param string $content

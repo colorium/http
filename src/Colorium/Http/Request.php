@@ -73,10 +73,7 @@ class Request
     {
         $this->uri = ($uri instanceof Uri) ? $uri : new Uri($uri);
         $this->method = $method;
-
         $this->accept = new Request\Accept;
-
-        $this->cli = (php_sapi_name() == 'cli');
     }
 
 
@@ -170,12 +167,25 @@ class Request
 
 
     /**
+     * Clone request
+     */
+    public function __clone()
+    {
+        $this->uri = clone $this->uri;
+        $this->accept = clone $this->accept;
+        foreach($this->files as $key => $file) {
+            $this->files[$key] = clone $file;
+        }
+    }
+
+
+    /**
      * Create from global environment
      *
      * @param bool|string $base
      * @return static
      */
-    public static function current($base = true)
+    public static function generate($base = true)
     {
         $uri = Uri::current($base);
 
@@ -191,6 +201,7 @@ class Request
             $request->server('HTTP_ACCEPT_ENCODING'),
             $request->server('HTTP_ACCEPT_CHARSET')
         );
+
         $request->method = $request->server('REQUEST_METHOD');
         $request->secure = ($request->server('HTTPS') == 'on');
         $request->ajax = $request->server('HTTP_X_REQUESTED_WITH')
@@ -213,6 +224,7 @@ class Request
             $request->files[$index] = new Request\File($file);
         }
 
+        $request->cli = (php_sapi_name() === 'cli');
         $request->agent = $request->server('HTTP_USER_AGENT');
         $request->ip = $request->server('REMOTE_ADDR');
         $request->time = $request->server('REQUEST_TIME');
