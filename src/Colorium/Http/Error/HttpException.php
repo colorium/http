@@ -9,7 +9,4 @@ class HttpException extends \Exception
 
 	/** @var int */
 	protected $code = 500;
-
-	/** @var string */
-	protected $message = Status::_500;
 }

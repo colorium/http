@@ -9,7 +9,4 @@ class AccessDeniedException extends HttpException
 
 	/** @var int */
 	protected $code = 401;
-
-	/** @var string */
-	protected $message = Status::_401;
 }
