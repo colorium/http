@@ -2,8 +2,6 @@
 
 namespace Colorium\Http\Error;
 
-use Colorium\Http\Status;
-
 class NotImplementedException extends HttpException
 {
 
