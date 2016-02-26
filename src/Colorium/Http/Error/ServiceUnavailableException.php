@@ -2,7 +2,7 @@
 
 namespace Colorium\Http\Error;
 
-class ServiceUnavailable extends HttpException
+class ServiceUnavailableException extends HttpException
 {
 
 
