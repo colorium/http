@@ -47,6 +47,7 @@ class Uri
         if(!is_array($uri)) {
             $uri = parse_url($uri);
         }
+
         $parsed = $uri + [
             'scheme' => null,
             'user' => null,
@@ -72,6 +73,7 @@ class Uri
         if($this->base) {
             $this->path = substr($this->path, strlen($this->base)) ?: '/';
         }
+
         parse_str($parsed['query'], $this->params);
 
         $full = '/';
@@ -194,44 +196,52 @@ class Uri
     /**
      * Generate uri from $_SERVER
      *
-     * @param bool|string $base
+     * @param string $base
      * @return static
      */
-    public static function current($base = true)
+    public static function current($base = null)
     {
-        // parse server header
-        $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : null;
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
-        $path = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
-        $query = parse_url($path, PHP_URL_QUERY);
-        $path = parse_url($path, PHP_URL_PATH);
+        static $current;
+        if(!$current) {
 
-        // auto-resolve base path
-        if($base === true) {
-            $base = null;
-            if(isset($_SERVER['SCRIPT_NAME']) and $script = dirname($_SERVER['SCRIPT_NAME'])) {
-                $script = trim($script, '.');
-                while($script and $script != '/') {
-                    if(strncmp($path, $script, strlen($script)) === 0) {
-                        $base = $script;
-                        break;
+            // parse server header
+            $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : null;
+            $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
+            $path = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+            $query = parse_url($path, PHP_URL_QUERY);
+            $path = parse_url($path, PHP_URL_PATH);
+
+            // auto-resolve base path
+            if(!$base) {
+                if(!empty($_SERVER['HTTP_BASE_URI'])) {
+                    $base = $_SERVER['HTTP_BASE_URI'];
+                }
+                elseif(isset($_SERVER['SCRIPT_NAME']) and $scriptname = dirname($_SERVER['SCRIPT_NAME'])) {
+                    $scriptname = trim($scriptname, '.');
+                    while($scriptname and $scriptname != '/') {
+                        if(strncmp($path, $scriptname, strlen($scriptname)) === 0) {
+                            $base = $scriptname;
+                            break;
+                        }
+                        $scriptname = dirname($scriptname);
                     }
-                    $script = dirname($script);
                 }
             }
+
+            $current = new static([
+                'scheme' => $scheme,
+                'user' => null,
+                'pass' => null,
+                'host' => $host,
+                'port' => null,
+                'base' => $base,
+                'path' => $path,
+                'query' => $query,
+                'fragment' => null,
+            ]);
         }
 
-        return new static([
-            'scheme' => $scheme,
-            'user' => null,
-            'pass' => null,
-            'host' => $host,
-            'port' => null,
-            'base' => $base,
-            'path' => $path,
-            'query' => $query,
-            'fragment' => null,
-        ]);
+        return $current;
     }
 
 

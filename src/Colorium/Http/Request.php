@@ -182,17 +182,14 @@ class Request
     /**
      * Create from global environment
      *
-     * @param bool|string $base
      * @return static
      */
-    public static function globals($base = true)
+    public static function globals()
     {
         static $globals;
         if(!$globals) {
 
-            $uri = Uri::current($base);
-
-            $globals = new static($uri);
+            $globals = new static(Uri::current());
             $globals->servers = &$_SERVER;
             $globals->envs = &$_ENV;
             $globals->values = &$_POST;
@@ -213,17 +210,17 @@ class Request
             $globals->root = dirname($globals->server('SCRIPT_FILENAME'));
             $globals->root = rtrim($globals->root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
-            if (function_exists('http_response_code')) {
+            if(function_exists('http_response_code')) {
                 $globals->code = http_response_code();
             }
-            if (function_exists('http_get_request_body')) {
+            if(function_exists('http_get_request_body')) {
                 $globals->body = http_get_request_body();
             }
-            if (function_exists('apache_request_headers')) {
+            if(function_exists('apache_request_headers')) {
                 $globals->headers = apache_request_headers();
             }
 
-            foreach ($_FILES as $index => $file) {
+            foreach($_FILES as $index => $file) {
                 $globals->files[$index] = new Request\File($file);
             }
 
